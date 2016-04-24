@@ -32,3 +32,7 @@ spring:
 server:
   port: ${port:8181}
 
+
+---
+spring.profiles: production
+spring.profiles.include: security,cloud

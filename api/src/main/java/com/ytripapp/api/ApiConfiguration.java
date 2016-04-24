@@ -16,9 +16,11 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.session.SessionAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -30,16 +32,27 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.session.data.redis.config.ConfigureRedisAction;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.persistence.EntityManager;
 
 @Configuration
-@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {
+    SecurityAutoConfiguration.class,
+    ManagementWebSecurityAutoConfiguration.class,
+    SessionAutoConfiguration.class,
+    RedisAutoConfiguration.class,
+    RedisHttpSessionConfiguration.class
+})
 public class ApiConfiguration {
 
     @EntityScan(basePackageClasses = User.class)
@@ -109,18 +122,29 @@ public class ApiConfiguration {
         }
     }
 
-
     @Profile("cloud")
     @EnableDiscoveryClient
+    @EnableRedisHttpSession
+    @Import({
+        SessionAutoConfiguration.class,
+        RedisAutoConfiguration.class,
+        RedisHttpSessionConfiguration.class
+    })
     @Configuration
     static class CloudConfiguration {
     }
 
-
     @Profile("security")
     @EnableWebSecurity
-    @Import({SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
+    @Import({
+        SecurityAutoConfiguration.class,
+        ManagementWebSecurityAutoConfiguration.class,
+    })
     static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    }
 
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+        }
+    }
 }
