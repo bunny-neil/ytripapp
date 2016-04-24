@@ -1,6 +1,7 @@
 package com.ytripapp.service;
 
 import com.ytripapp.command.UserSessionCommand;
+import com.ytripapp.domain.Authority;
 import com.ytripapp.domain.User;
 import com.ytripapp.domain.UserSession;
 import com.ytripapp.exception.InvalidCredentialsException;
@@ -9,6 +10,7 @@ import com.ytripapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UserSessionService {
 
@@ -29,7 +31,13 @@ public class UserSessionService {
         if (! passwordEncoder.matches(command.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException();
         }
-        return UserSession.builder().enabled(user.isEnabled()).profile(user.getProfile()).userId(user.getId()).build();
+        return UserSession
+            .builder()
+            .enabled(user.isEnabled())
+            .profile(user.getProfile())
+            .userId(user.getId())
+            .authorities(user.getAuthorities().stream().map(Authority::name).collect(Collectors.toSet()))
+            .build();
     }
 
 }
