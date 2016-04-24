@@ -1,0 +1,7 @@
+spring.cloud.zookeeper:
+    enabled: true
+    config.watcher.enabled: true
+
+server:
+  port: ${port:0}
+

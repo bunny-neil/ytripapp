@@ -1,0 +1,34 @@
+api.version: @api.version@
+
+spring:
+  application:
+    name: api-${api.version}
+  cloud.zookeeper:
+      enabled: false
+      config.watcher.enabled: false
+  resources:
+      addMappings: false
+  mvc:
+    favicon:
+      enabled: false
+  datasource:
+    driver-class-name: 'com.mysql.jdbc.Driver'
+    url: 'jdbc:mysql://localhost:3306/ytripapp2?useUnicode=yes'
+    username: 'ytripapp'
+    password: 'ytripapp123'
+  jpa:
+    show-sql: true
+    hibernate.ddl-auto: 'validate'
+    properties:
+      #hibernate.implicit_naming_strategy: 'org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl'
+      hibernate:
+        physical_naming_strategy: 'com.ytripapp.repository.support.PhysicalNamingStrategy'
+        search:
+          analyzer: 'org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer'
+          default:
+            directory_provider: 'filesystem'
+            indexBase: 'indexFiles'
+
+server:
+  port: ${port:8181}
+

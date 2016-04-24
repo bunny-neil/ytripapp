@@ -1,0 +1,11 @@
+apply plugin: 'spring-boot'
+
+bootRepackage {
+    mainClass = 'com.ytripapp.migration.Application'
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-jdbc'
+    compile 'org.flywaydb:flyway-core'
+    runtime 'mysql:mysql-connector-java'
+}
