@@ -23,6 +23,7 @@ dependencies {
     runtime 'mysql:mysql-connector-java'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile lombok
+    compile commons_validator
 }
 
 processResources {
