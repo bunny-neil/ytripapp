@@ -1,0 +1,61 @@
+import org.ajoberstar.grgit.*
+def repo = Grgit.open()
+ext.branchName = repo.branch.current.name
+
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://repo.spring.io/libs-milestone'
+        }
+    }
+    dependencies {
+        classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE'
+        classpath 'org.ajoberstar:gradle-git:1.4.2'
+    }
+}
+
+configure(allprojects) { project ->
+    group = 'com.ytripapp'
+    version = version
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+        maven {
+            url 'https://repo.spring.io/libs-milestone'
+        }
+    }
+}
+
+configure(subprojects) { child ->
+    apply plugin: "io.spring.dependency-management"
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.cloud:spring-cloud-starter-parent:Brixton.RC2'
+        }
+    }
+    apply plugin: 'java'
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    ext {
+        lucene_version = '5.3.1'
+        spring_session_version = '1.2.0.RC2'
+
+        lombok = 'org.projectlombok:lombok:1.16.8'
+        jackson_hibernate5 = 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5:2.6.5'
+        hiberate_search_orm = 'org.hibernate:hibernate-search-orm:5.5.2.Final'
+        lucene_core = "org.apache.lucene:lucene-core:${lucene_version}"
+        lucene_queryparser = "org.apache.lucene:lucene-queryparser:${lucene_version}"
+        lucene_analyzers_smartcn = "org.apache.lucene:lucene-analyzers-smartcn:${lucene_version}"
+        rsql_parser = 'cz.jirutka.rsql:rsql-parser:2.1.0'
+        q_builders = 'com.github.rutledgepaulv:q-builders:1.3'
+        feign_httpClient = 'com.netflix.feign:feign-httpclient:8.15.1'
+        commons_validator = 'commons-validator:commons-validator:1.5.0'
+        jose4j = 'org.bitbucket.b_c:jose4j:0.5.0'
+    }
+
+}

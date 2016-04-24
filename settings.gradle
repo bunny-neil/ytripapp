@@ -1,0 +1,5 @@
+rootProject.name = 'ytripapp3'
+
+rootProject.children.each { child ->
+    child.buildFileName = "${child.name}.gradle"
+}
