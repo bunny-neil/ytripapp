@@ -1,0 +1,14 @@
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.cloud:spring-cloud-starter-hystrix'
+    compile 'org.springframework.cloud:spring-cloud-starter-feign'
+    runtime 'org.apache.httpcomponents:httpclient'
+    runtime feign_httpClient
+    compile 'org.springframework.data:spring-data-commons'
+    compile lombok
+    /*
+    compile jose4j
+    compile q_builders
+    compile commons_validator
+    */
+}
