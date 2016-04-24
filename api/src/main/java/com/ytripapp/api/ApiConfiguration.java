@@ -30,6 +30,8 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.LocaleResolver;
@@ -113,4 +115,12 @@ public class ApiConfiguration {
     @Configuration
     static class CloudConfiguration {
     }
+
+
+    @Profile("security")
+    @EnableWebSecurity
+    @Import({SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
+    static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    }
+
 }
