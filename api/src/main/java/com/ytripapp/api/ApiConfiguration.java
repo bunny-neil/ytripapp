@@ -1,8 +1,13 @@
 package com.ytripapp.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.ytripapp.command.validator.UserSessionCommandValidator;
 import com.ytripapp.domain.User;
 import com.ytripapp.repository.SearchableRepositoryBase;
 import com.ytripapp.repository.UserRepository;
+import com.ytripapp.service.UserSessionService;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.springframework.beans.factory.DisposableBean;
@@ -11,12 +16,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityManager;
 
@@ -46,10 +58,38 @@ public class ApiConfiguration {
         }
     }
 
+    @Configuration
+    static class WebMvcConfiguration extends WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter {
+
+        @Bean
+        PasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
+
+        @Bean
+        UserSessionCommandValidator sessionCommandValidator() {
+            return new UserSessionCommandValidator();
+        }
+
+        @Autowired
+        @Bean
+        UserSessionService userSessionService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+            return new UserSessionService(userRepository, passwordEncoder);
+        }
+
+        @Bean
+        ReloadableResourceBundleMessageSource messageSource() {
+            ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+            messageSource.setDefaultEncoding("UTF-8");
+            messageSource.setBasenames("classpath:/messages");
+            return messageSource;
+        }
+    }
+
+
     @Profile("cloud")
     @EnableDiscoveryClient
     @Configuration
     static class CloudConfiguration {
     }
-
 }
