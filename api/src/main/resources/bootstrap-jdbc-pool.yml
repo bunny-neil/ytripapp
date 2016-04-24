@@ -1,0 +1,20 @@
+spring:
+  data-source:
+    properties:
+      jmxEnabled: true
+      initialSize: 25
+      maxActive: 150
+      minIdle: 25
+      maxIdle: 50
+      maxWait: 10000
+      maxAge: 600000
+      timeBetweenEvictionRunsMillis: 5000
+      minEvictableIdleTimeMillis: 60000
+      validationQuery: SELECT 1
+      validationQueryTimeout: 3
+      validationInterval: 15000
+      testOnBorrow: true
+      testWhileIdle: true
+      testOnReturn: false
+      jdbcInterceptors: ConnectionState
+      defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
