@@ -42,6 +42,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.session.data.redis.config.ConfigureRedisAction;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration;
+import org.springframework.session.web.http.HeaderHttpSessionStrategy;
+import org.springframework.session.web.http.HttpSessionStrategy;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.persistence.EntityManager;
@@ -139,6 +141,10 @@ public class ApiConfiguration {
     })
     @Configuration
     static class CloudConfiguration {
+        @Bean
+        public HttpSessionStrategy httpSessionStrategy() {
+            return new HeaderHttpSessionStrategy();
+        }
     }
 
     @Profile("security")
@@ -148,10 +154,14 @@ public class ApiConfiguration {
         ManagementWebSecurityAutoConfiguration.class,
     })
     static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+            http.csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                .and()
+                    .authorizeRequests()
+                    .antMatchers("/sessions/**").permitAll()
+                    .anyRequest().fullyAuthenticated();
         }
     }
 }

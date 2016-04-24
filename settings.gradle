@@ -2,6 +2,7 @@ rootProject.name = 'ytripapp3'
 include 'migration'
 include 'api'
 include 'api-client'
+include 'gateway'
 
 rootProject.children.each { child ->
     child.buildFileName = "${child.name}.gradle"
