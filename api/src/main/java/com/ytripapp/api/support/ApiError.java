@@ -1,4 +1,4 @@
-package com.ytripapp.api;
+package com.ytripapp.api.support;
 
 import lombok.Data;
 

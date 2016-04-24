@@ -1,6 +1,5 @@
 package com.ytripapp.api.support;
 
-import com.ytripapp.api.ApiError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
