@@ -4,7 +4,7 @@ import com.ytripapp.command.UserSessionCommand;
 import com.ytripapp.domain.User;
 import com.ytripapp.domain.UserSession;
 import com.ytripapp.exception.InvalidCredentialsException;
-import com.ytripapp.exception.UserNotFoundException;
+import com.ytripapp.exception.InvalidEmailAddressException;
 import com.ytripapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,7 +23,7 @@ public class UserSessionService {
     public UserSession create(UserSessionCommand command) {
         Optional<User> found = Optional.ofNullable(userRepository.findByEmailAddress(command.getEmailAddress()));
         if (! found.isPresent()) {
-            throw new UserNotFoundException();
+            throw new InvalidEmailAddressException();
         }
         User user = found.get();
         if (! passwordEncoder.matches(command.getPassword(), user.getPassword())) {
