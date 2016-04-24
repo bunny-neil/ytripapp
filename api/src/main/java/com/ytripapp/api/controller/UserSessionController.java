@@ -4,6 +4,7 @@ import com.ytripapp.api.support.ApiError;
 import com.ytripapp.command.UserSessionCommand;
 import com.ytripapp.command.validator.UserSessionCommandValidator;
 import com.ytripapp.domain.UserSession;
+import com.ytripapp.exception.ApiException;
 import com.ytripapp.exception.InvalidCredentialsException;
 import com.ytripapp.exception.InvalidEmailAddressException;
 import com.ytripapp.service.UserSessionService;
@@ -25,7 +26,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("/sessions")
-public class SessionController {
+public class UserSessionController {
 
     @Autowired
     MessageSource messageSource;
@@ -52,10 +53,10 @@ public class SessionController {
         InvalidEmailAddressException.class,
         InvalidCredentialsException.class
     })
-    public ResponseEntity<ApiError> handleSessionCreationException(Locale locale) {
+    public ResponseEntity<ApiError> handleSessionCreationException(ApiException ex, Locale locale) {
         ApiError error = new ApiError();
-        error.setCode("invalid.userSession.emailAddressOrPassword");
-        error.setMessage(messageSource.getMessage(error.getCode(), null, locale));
+        error.setCode(ex.getCode());
+        error.setMessage(messageSource.getMessage(error.getCode(), ex.getArguments(), locale));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

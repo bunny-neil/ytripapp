@@ -8,6 +8,7 @@ import com.ytripapp.command.validator.UserSessionCommandValidator;
 import com.ytripapp.domain.User;
 import com.ytripapp.repository.SearchableRepositoryBase;
 import com.ytripapp.repository.UserRepository;
+import com.ytripapp.service.UserService;
 import com.ytripapp.service.UserSessionService;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
@@ -94,6 +95,12 @@ public class ApiConfiguration {
         @Bean
         UserSessionService userSessionService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
             return new UserSessionService(userRepository, passwordEncoder);
+        }
+
+        @Autowired
+        @Bean
+        UserService userService(UserRepository userRepository) {
+            return new UserService(userRepository);
         }
 
         @Bean
