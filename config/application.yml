@@ -1,3 +1,5 @@
 api:
   locale:
     header-name: 'X-Ytrip-Locale'
+  session:
+    header-name: 'X-Ytrip-Session'

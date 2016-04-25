@@ -145,9 +145,15 @@ public class ApiConfiguration {
     })
     @Configuration
     static class CloudConfiguration {
+
+        @Value("${api.session.header-name:X-Ytrip-Session}")
+        String apiSessionHeaderName;
+
         @Bean
         public HttpSessionStrategy httpSessionStrategy() {
-            return new HeaderHttpSessionStrategy();
+            HeaderHttpSessionStrategy sessionStrategy = new HeaderHttpSessionStrategy();
+            sessionStrategy.setHeaderName(apiSessionHeaderName);
+            return sessionStrategy;
         }
     }
 

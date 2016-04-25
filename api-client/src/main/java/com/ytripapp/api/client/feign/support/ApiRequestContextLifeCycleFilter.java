@@ -16,12 +16,13 @@ import java.io.IOException;
 public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
 
     ApiRequestLocaleResolver localeResolver;
-    HeaderHttpSessionStrategy headerHttpSessionStrategy;
+    ApiHttpSessionStrategy apiHttpSessionStrategy;
 
     public ApiRequestContextLifeCycleFilter(
-            ApiRequestLocaleResolver localeResolver, HeaderHttpSessionStrategy headerHttpSessionStrategy) {
+            ApiRequestLocaleResolver localeResolver,
+            ApiHttpSessionStrategy apiHttpSessionStrategy) {
         this.localeResolver = localeResolver;
-        this.headerHttpSessionStrategy = headerHttpSessionStrategy;
+        this.apiHttpSessionStrategy = apiHttpSessionStrategy;
     }
 
     @Override
@@ -45,17 +46,11 @@ public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
 
     private void createApiRequestContext(HttpServletRequest request) {
         ApiRequestContext context = new ApiRequestContext();
-        context.getHeaders().put(localeResolver.getHeaderName(), localeResolver.resolveLocale(request).toString());
-        /*
-        context.getHeaders().put(headerHttpSessionStrategy.get)
-        ApiRequestContextHolder.instance().set(context);*/
-        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            UserDetailsAdapter adapter = (UserDetailsAdapter)authentication.getPrincipal();
-            if (adapter.getLogin() != null) {
-                context.setUsername(adapter.getLogin().getUsername());
-                context.setPassword(adapter.getLogin().getPassword());
-            }
-        }*/
+        context.getHeaders().put(
+                localeResolver.getHeaderName(),
+                localeResolver.resolveLocale(request).toString());
+        context.getHeaders().put(
+                apiHttpSessionStrategy.getHeaderName(),
+                apiHttpSessionStrategy.getRequestedSessionId(request));
     }
 }

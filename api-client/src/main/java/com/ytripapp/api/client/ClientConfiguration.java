@@ -7,6 +7,7 @@ import com.ytripapp.api.client.feign.decoder.CustomObjectDecoder;
 import com.ytripapp.api.client.feign.decoder.FeignErrorDecoder;
 import com.ytripapp.api.client.feign.decoder.FeignResponseDecoder;
 import com.ytripapp.api.client.feign.decoder.PageDecoder;
+import com.ytripapp.api.client.feign.support.ApiHttpSessionStrategy;
 import com.ytripapp.api.client.feign.support.ApiRequestContextInterceptor;
 import com.ytripapp.api.client.feign.support.ApiRequestContextLifeCycleFilter;
 import com.ytripapp.api.client.feign.support.ApiRequestLocaleResolver;
@@ -50,6 +51,9 @@ public class ClientConfiguration {
         @Value("${api.locale.header-name:X-Ytrip-Locale}")
         String apiLocaleHaderName;
 
+        @Value("${api.session.header-name:X-Ytrip-Session}")
+        String apiSessionHeaderName;
+
         @Autowired
         ObjectMapper objectMapper;
 
@@ -80,16 +84,17 @@ public class ClientConfiguration {
         }
 
         @Bean
-        public HeaderHttpSessionStrategy headerHttpSessionStrategy() {
-            return new HeaderHttpSessionStrategy();
+        public ApiHttpSessionStrategy headerHttpSessionStrategy() {
+            ApiHttpSessionStrategy sessionStrategy = new ApiHttpSessionStrategy(apiSessionHeaderName);
+            return sessionStrategy;
         }
 
         @Autowired
         @Bean
         FilterRegistrationBean apiRequestContextFilter(
-                ApiRequestLocaleResolver localeResolver, HeaderHttpSessionStrategy headerHttpSessionStrategy) {
+                ApiRequestLocaleResolver localeResolver, ApiHttpSessionStrategy apiHttpSessionStrategy) {
             FilterRegistrationBean bean = new FilterRegistrationBean();
-            bean.setFilter(new ApiRequestContextLifeCycleFilter(localeResolver, headerHttpSessionStrategy));
+            bean.setFilter(new ApiRequestContextLifeCycleFilter(localeResolver, apiHttpSessionStrategy));
             bean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
             return bean;
         }
