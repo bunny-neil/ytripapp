@@ -8,7 +8,7 @@ import com.ytripapp.api.client.feign.support.ApiError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
-public class UserSessionClient {
+public class UserSessionResourceClient {
 
     @Autowired
     UserSessionResource userSessionResource;

@@ -35,8 +35,8 @@ public class ClientConfiguration {
     public static final String API_VERSION = "v2";
 
     @Bean
-    UserSessionClient userSessionClient() {
-        return new UserSessionClient();
+    UserSessionResourceClient userSessionClient() {
+        return new UserSessionResourceClient();
     }
 
     @Configuration

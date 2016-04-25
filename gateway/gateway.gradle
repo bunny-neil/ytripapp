@@ -12,7 +12,7 @@ dependencies {
     runtime 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-all'
     compile 'org.springframework.cloud:spring-cloud-starter-zuul'
-//    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-security'
     compile "org.springframework.session:spring-session:${spring_session_version}"
     compile "org.springframework.session:spring-session-data-redis:${spring_session_version}"
     compile project(':api-client')
