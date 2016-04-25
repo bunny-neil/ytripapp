@@ -25,6 +25,10 @@ spring:
           default:
             directory_provider: 'filesystem'
             indexBase: 'indexFiles'
+  cloud:
+    consul:
+      config:
+        enabled: false
 
 server:
   port: ${port:8181}

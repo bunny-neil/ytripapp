@@ -1,6 +1,12 @@
-spring.cloud.zookeeper:
-    enabled: true
-    config.watcher.enabled: true
+spring:
+  cloud:
+    consul:
+      discovery:
+        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.int}}
+      config:
+        enabled: true
+        profileSeparator: '_'
+        format: YAML
 
 server:
   port: ${port:0}
