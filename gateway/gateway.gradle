@@ -10,7 +10,7 @@ bootRepackage {
 
 dependencies {
     runtime 'org.springframework.boot:spring-boot-starter-actuator'
-    compile 'org.springframework.cloud:spring-cloud-starter-zookeeper-all'
+    compile 'org.springframework.cloud:spring-cloud-starter-consul-all'
     compile 'org.springframework.cloud:spring-cloud-starter-zuul'
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile project(':api-client')

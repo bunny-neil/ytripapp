@@ -15,6 +15,7 @@ import feign.codec.ErrorDecoder;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -46,6 +47,9 @@ public class ClientConfiguration {
     @Configuration
     static class FeignSupportConfiguration implements InitializingBean {
 
+        @Value("${api.locale.header-name:X-Ytrip-Locale}")
+        String apiLocaleHaderName;
+
         @Autowired
         ObjectMapper objectMapper;
 
@@ -66,8 +70,8 @@ public class ClientConfiguration {
         }
 
         @Bean
-        LocaleResolver localeResolver() {
-            return new ApiRequestLocaleResolver();
+        ApiRequestLocaleResolver localeResolver() {
+            return new ApiRequestLocaleResolver(apiLocaleHaderName);
         }
 
         @Override
@@ -83,7 +87,7 @@ public class ClientConfiguration {
         @Autowired
         @Bean
         FilterRegistrationBean apiRequestContextFilter(
-                LocaleResolver localeResolver, HeaderHttpSessionStrategy headerHttpSessionStrategy) {
+                ApiRequestLocaleResolver localeResolver, HeaderHttpSessionStrategy headerHttpSessionStrategy) {
             FilterRegistrationBean bean = new FilterRegistrationBean();
             bean.setFilter(new ApiRequestContextLifeCycleFilter(localeResolver, headerHttpSessionStrategy));
             bean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);

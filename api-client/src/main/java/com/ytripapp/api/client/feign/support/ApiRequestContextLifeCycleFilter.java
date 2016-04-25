@@ -15,11 +15,11 @@ import java.io.IOException;
 
 public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
 
-    LocaleResolver localeResolver;
+    ApiRequestLocaleResolver localeResolver;
     HeaderHttpSessionStrategy headerHttpSessionStrategy;
 
     public ApiRequestContextLifeCycleFilter(
-            LocaleResolver localeResolver, HeaderHttpSessionStrategy headerHttpSessionStrategy) {
+            ApiRequestLocaleResolver localeResolver, HeaderHttpSessionStrategy headerHttpSessionStrategy) {
         this.localeResolver = localeResolver;
         this.headerHttpSessionStrategy = headerHttpSessionStrategy;
     }
@@ -45,8 +45,8 @@ public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
 
     private void createApiRequestContext(HttpServletRequest request) {
         ApiRequestContext context = new ApiRequestContext();
-        /*context.getHeaders().put(
-                ApiRequestLocaleResolver.LOCALE_HEADER_NAME, localeResolver.resolveLocale(request).toString());
+        context.getHeaders().put(localeResolver.getHeaderName(), localeResolver.resolveLocale(request).toString());
+        /*
         context.getHeaders().put(headerHttpSessionStrategy.get)
         ApiRequestContextHolder.instance().set(context);*/
         /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
