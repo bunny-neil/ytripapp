@@ -10,3 +10,5 @@ zuul:
     resources:
       path: /api/v2/**
       serviceId: api-v2
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 100

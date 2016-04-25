@@ -1,9 +1,7 @@
-package com.ytripapp.gateway.support;
+package com.ytripapp.api.client.feign.support;
 
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
-import com.ytripapp.api.client.feign.support.ApiRequestContext;
-import com.ytripapp.api.client.feign.support.ApiRequestContextHolder;
-import com.ytripapp.api.client.feign.support.ApiRequestLocaleResolver;
+import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.servlet.LocaleResolver;
 
@@ -17,7 +15,14 @@ import java.io.IOException;
 
 public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
 
-    LocaleResolver localeResolver = new ApiRequestLocaleResolver();
+    LocaleResolver localeResolver;
+    HeaderHttpSessionStrategy headerHttpSessionStrategy;
+
+    public ApiRequestContextLifeCycleFilter(
+            LocaleResolver localeResolver, HeaderHttpSessionStrategy headerHttpSessionStrategy) {
+        this.localeResolver = localeResolver;
+        this.headerHttpSessionStrategy = headerHttpSessionStrategy;
+    }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
@@ -30,6 +35,9 @@ public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
         try {
             chain.doFilter(request, response);
         }
+        catch (Exception ex) {
+
+        }
         finally {
             hystrixRequestContext.shutdown();
         }
@@ -37,8 +45,10 @@ public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
 
     private void createApiRequestContext(HttpServletRequest request) {
         ApiRequestContext context = new ApiRequestContext();
-        context.setLocale(localeResolver.resolveLocale(request));
-        ApiRequestContextHolder.instance().set(context);
+        /*context.getHeaders().put(
+                ApiRequestLocaleResolver.LOCALE_HEADER_NAME, localeResolver.resolveLocale(request).toString());
+        context.getHeaders().put(headerHttpSessionStrategy.get)
+        ApiRequestContextHolder.instance().set(context);*/
         /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             UserDetailsAdapter adapter = (UserDetailsAdapter)authentication.getPrincipal();

@@ -8,19 +8,23 @@ import com.ytripapp.api.client.feign.decoder.FeignErrorDecoder;
 import com.ytripapp.api.client.feign.decoder.FeignResponseDecoder;
 import com.ytripapp.api.client.feign.decoder.PageDecoder;
 import com.ytripapp.api.client.feign.support.ApiRequestContextInterceptor;
+import com.ytripapp.api.client.feign.support.ApiRequestContextLifeCycleFilter;
 import com.ytripapp.api.client.feign.support.ApiRequestLocaleResolver;
 import com.ytripapp.api.client.feign.support.HystrixConcurrencyStrategy;
 import feign.codec.ErrorDecoder;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.feign.support.ResponseEntityDecoder;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.ArrayList;
@@ -66,14 +70,29 @@ public class ClientConfiguration {
             return new ApiRequestLocaleResolver();
         }
 
-        @Bean
-        ApiRequestContextInterceptor localeFeignInterceptor() {
-            return new ApiRequestContextInterceptor();
-        }
-
         @Override
         public void afterPropertiesSet() throws Exception {
             HystrixPlugins.getInstance().registerConcurrencyStrategy(new HystrixConcurrencyStrategy());
+        }
+
+        @Bean
+        public HeaderHttpSessionStrategy headerHttpSessionStrategy() {
+            return new HeaderHttpSessionStrategy();
+        }
+
+        @Autowired
+        @Bean
+        FilterRegistrationBean apiRequestContextFilter(
+                LocaleResolver localeResolver, HeaderHttpSessionStrategy headerHttpSessionStrategy) {
+            FilterRegistrationBean bean = new FilterRegistrationBean();
+            bean.setFilter(new ApiRequestContextLifeCycleFilter(localeResolver, headerHttpSessionStrategy));
+            bean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
+            return bean;
+        }
+
+        @Bean
+        ApiRequestContextInterceptor apiRequestContextInterceptor() {
+            return new ApiRequestContextInterceptor();
         }
     }
 }

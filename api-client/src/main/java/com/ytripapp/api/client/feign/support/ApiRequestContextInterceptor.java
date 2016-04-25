@@ -10,11 +10,11 @@ import java.util.Base64;
 public class ApiRequestContextInterceptor implements RequestInterceptor {
 
     public void apply(RequestTemplate template) {
-        ApiRequestContext context = ApiRequestContextHolder.instance().get();
+        /*ApiRequestContext context = ApiRequestContextHolder.instance().get();
         template.header(
                 ApiRequestLocaleResolver.LOCALE_HEADER_NAME,
                 context.getLocale().toString()
-        );
+        );*/
         /*template.header(
                 "Authorization",
                 basicAuthHeaderValue()

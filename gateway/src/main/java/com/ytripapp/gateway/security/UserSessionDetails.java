@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@JsonIgnoreProperties({"username", "password", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
+@JsonIgnoreProperties({"username", "password", "accountNonExpired", "accountNonLocked", "redentialsNonExpired"})
 public class UserSessionDetails implements UserDetails {
 
     private Long userId;
@@ -23,7 +23,6 @@ public class UserSessionDetails implements UserDetails {
     private Set<SimpleGrantedAuthority> authorities = new HashSet<>();
     private String username;
     private String password;
-
 
     public UserSessionDetails(UserSession session, String username, String password) {
         userId = session.getUserId();

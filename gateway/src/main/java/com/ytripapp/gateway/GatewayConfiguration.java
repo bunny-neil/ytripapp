@@ -6,12 +6,9 @@ import com.ytripapp.api.client.ClientConfiguration;
 import com.ytripapp.api.client.UserSessionResourceClient;
 import com.ytripapp.gateway.security.ApiAuthenticationProvider;
 import com.ytripapp.gateway.security.AuthenticationSuccessHandler;
-import com.ytripapp.gateway.support.ApiRequestContextLifeCycleFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +20,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.session.web.http.HeaderHttpSessionStrategy;
-import org.springframework.session.web.http.HttpSessionStrategy;
 
 @EnableDiscoveryClient
 @EnableZuulProxy
@@ -53,19 +48,6 @@ public class GatewayConfiguration {
         @Autowired
         MappingJackson2HttpMessageConverter converter;
 
-        @Bean
-        public HttpSessionStrategy httpSessionStrategy() {
-            return new HeaderHttpSessionStrategy();
-        }
-
-        @Bean
-        FilterRegistrationBean apiRequestContextFilter() {
-            FilterRegistrationBean bean = new FilterRegistrationBean();
-            bean.setFilter(new ApiRequestContextLifeCycleFilter());
-            bean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
-            return bean;
-        }
-
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.authenticationProvider(new ApiAuthenticationProvider(userSessionResourceClient));
@@ -80,7 +62,7 @@ public class GatewayConfiguration {
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
-                    .loginProcessingUrl("/sessions")
+                    .loginProcessingUrl("/api/v2/sessions")
                     .successHandler(new AuthenticationSuccessHandler(converter));
         }
     }

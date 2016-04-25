@@ -6,6 +6,8 @@ dependencies {
     runtime feign_httpClient
     compile 'org.springframework.data:spring-data-commons'
     compile lombok
+    compile "org.springframework.session:spring-session:${spring_session_version}"
+    compile "org.springframework.session:spring-session-data-redis:${spring_session_version}"
     /*
     compile jose4j
     compile q_builders
