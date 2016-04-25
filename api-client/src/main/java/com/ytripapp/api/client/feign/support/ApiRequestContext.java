@@ -9,8 +9,6 @@ import java.util.Map;
 @Data
 public class ApiRequestContext {
 
-    /*private String username;
-    private String password;*/
     Map<String, String> headers = new HashMap<>();
 
 }
