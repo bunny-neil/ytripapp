@@ -1,0 +1,3 @@
+api:
+  locale:
+    header-name: 'X-Ytrip-Locale'

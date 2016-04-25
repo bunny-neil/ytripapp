@@ -15,6 +15,7 @@ import org.hibernate.search.jpa.Search;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -83,6 +84,9 @@ public class ApiConfiguration {
     @Configuration
     static class WebMvcConfiguration extends WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter {
 
+        @Value("${api.locale.header-name:X-Ytrip-Locale}")
+        String apiLocaleHaderName;
+
         @Bean
         PasswordEncoder passwordEncoder() {
             return new BCryptPasswordEncoder();
@@ -127,7 +131,7 @@ public class ApiConfiguration {
         @Bean
         @Override
         public LocaleResolver localeResolver() {
-            return new HttpHeaderLocaleResolver();
+            return new HttpHeaderLocaleResolver(apiLocaleHaderName);
         }
     }
 
