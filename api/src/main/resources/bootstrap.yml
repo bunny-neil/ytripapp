@@ -3,9 +3,6 @@ api.version: @api.version@
 spring:
   application:
     name: api-${api.version}
-  cloud.zookeeper:
-      enabled: false
-      config.watcher.enabled: false
   resources:
       addMappings: false
   mvc:
@@ -32,6 +29,8 @@ spring:
 server:
   port: ${port:8181}
 
+management:
+  addApplicationContextHeader: false
 
 ---
 spring.profiles: production

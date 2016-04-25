@@ -11,4 +11,7 @@ zuul:
       path: /api/v2/**
       serviceId: api-v2
 
+management:
+  addApplicationContextHeader: false
+
 hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 100
