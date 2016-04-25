@@ -161,7 +161,7 @@ public class ApiConfiguration {
                 .and()
                     .authorizeRequests()
                     .antMatchers("/sessions/**").permitAll()
-                    .anyRequest().fullyAuthenticated();
+                    .anyRequest().authenticated();
         }
     }
 }

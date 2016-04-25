@@ -5,9 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ytripapp.api.client.ClientConfiguration;
 import com.ytripapp.api.client.UserSessionResourceClient;
 import com.ytripapp.gateway.security.ApiAuthenticationProvider;
+import com.ytripapp.gateway.security.AuthenticationSuccessHandler;
+import com.ytripapp.gateway.support.ApiRequestContextLifeCycleFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
@@ -54,6 +58,14 @@ public class GatewayConfiguration {
             return new HeaderHttpSessionStrategy();
         }
 
+        @Bean
+        FilterRegistrationBean apiRequestContextFilter() {
+            FilterRegistrationBean bean = new FilterRegistrationBean();
+            bean.setFilter(new ApiRequestContextLifeCycleFilter());
+            bean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
+            return bean;
+        }
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.authenticationProvider(new ApiAuthenticationProvider(userSessionResourceClient));
@@ -62,13 +74,14 @@ public class GatewayConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                     .authorizeRequests()
-                    .anyRequest().fullyAuthenticated()
+                    .anyRequest().authenticated()
                 .and()
                     .formLogin()
-                        .loginProcessingUrl("/api/v2/sessions");
+                    .loginProcessingUrl("/sessions")
+                    .successHandler(new AuthenticationSuccessHandler(converter));
         }
     }
 }

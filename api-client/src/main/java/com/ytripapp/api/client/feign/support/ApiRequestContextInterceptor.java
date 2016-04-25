@@ -15,13 +15,13 @@ public class ApiRequestContextInterceptor implements RequestInterceptor {
                 ApiRequestLocaleResolver.LOCALE_HEADER_NAME,
                 context.getLocale().toString()
         );
-        template.header(
+        /*template.header(
                 "Authorization",
                 basicAuthHeaderValue()
-        );
+        );*/
     }
 
-    private String basicAuthHeaderValue() {
+    /*private String basicAuthHeaderValue() {
         ApiRequestContext context = ApiRequestContextHolder.instance().get();
         final String username = context.getUsername();
         final String password = context.getPassword();
@@ -38,5 +38,5 @@ public class ApiRequestContextInterceptor implements RequestInterceptor {
     private String encode(String username, String password) throws UnsupportedEncodingException {
         byte[] out = Base64.getEncoder().encode((username + ":" + password).getBytes(Util.ISO_8859_1));
         return new String(out, "US-ASCII");
-    }
+    }*/
 }
