@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@JsonIgnoreProperties({"username", "password", "accountNonExpired", "accountNonLocked", "redentialsNonExpired"})
+@JsonIgnoreProperties({"username", "password", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
 public class UserSessionDetails implements UserDetails {
 
     private Long userId;
