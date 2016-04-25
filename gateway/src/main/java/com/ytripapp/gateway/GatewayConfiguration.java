@@ -8,6 +8,7 @@ import com.ytripapp.gateway.security.ApiAuthenticationProvider;
 import com.ytripapp.gateway.security.AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -63,7 +64,9 @@ public class GatewayConfiguration {
                 .and()
                     .formLogin()
                     .loginProcessingUrl("/api/v2/sessions")
-                    .successHandler(new AuthenticationSuccessHandler(converter));
+                    .successHandler(new AuthenticationSuccessHandler(converter))
+                .and()
+                    .exceptionHandling().authenticationEntryPoint(new Http401AuthenticationEntryPoint(""));
         }
     }
 }
