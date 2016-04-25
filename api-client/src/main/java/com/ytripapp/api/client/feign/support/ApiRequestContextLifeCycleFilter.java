@@ -1,9 +1,10 @@
 package com.ytripapp.api.client.feign.support;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
-import org.springframework.session.web.http.HeaderHttpSessionStrategy;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
-import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -13,16 +14,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
 
     ApiRequestLocaleResolver localeResolver;
     ApiHttpSessionStrategy apiHttpSessionStrategy;
+    ObjectMapper objectMapper;
 
     public ApiRequestContextLifeCycleFilter(
             ApiRequestLocaleResolver localeResolver,
-            ApiHttpSessionStrategy apiHttpSessionStrategy) {
+            ApiHttpSessionStrategy apiHttpSessionStrategy,
+            ObjectMapper objectMapper) {
         this.localeResolver = localeResolver;
         this.apiHttpSessionStrategy = apiHttpSessionStrategy;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -36,8 +41,10 @@ public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
         try {
             chain.doFilter(request, response);
         }
-        catch (Exception ex) {
-
+        catch (HystrixRuntimeException ex) {
+            log.error("HystrixRuntimeException", ex.getCause());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.flushBuffer();
         }
         finally {
             hystrixRequestContext.shutdown();
@@ -52,5 +59,6 @@ public class ApiRequestContextLifeCycleFilter extends GenericFilterBean {
         context.getHeaders().put(
                 apiHttpSessionStrategy.getHeaderName(),
                 apiHttpSessionStrategy.getRequestedSessionId(request));
+        ApiRequestContextHolder.instance().set(context);
     }
 }

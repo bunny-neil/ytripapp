@@ -26,8 +26,6 @@ import org.springframework.cloud.netflix.feign.support.ResponseEntityDecoder;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.session.web.http.HeaderHttpSessionStrategy;
-import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.ArrayList;
 
@@ -85,8 +83,7 @@ public class ClientConfiguration {
 
         @Bean
         public ApiHttpSessionStrategy headerHttpSessionStrategy() {
-            ApiHttpSessionStrategy sessionStrategy = new ApiHttpSessionStrategy(apiSessionHeaderName);
-            return sessionStrategy;
+            return new ApiHttpSessionStrategy(apiSessionHeaderName);
         }
 
         @Autowired
@@ -94,7 +91,7 @@ public class ClientConfiguration {
         FilterRegistrationBean apiRequestContextFilter(
                 ApiRequestLocaleResolver localeResolver, ApiHttpSessionStrategy apiHttpSessionStrategy) {
             FilterRegistrationBean bean = new FilterRegistrationBean();
-            bean.setFilter(new ApiRequestContextLifeCycleFilter(localeResolver, apiHttpSessionStrategy));
+            bean.setFilter(new ApiRequestContextLifeCycleFilter(localeResolver, apiHttpSessionStrategy, objectMapper));
             bean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
             return bean;
         }

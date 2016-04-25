@@ -22,4 +22,4 @@ zuul:
 management:
   addApplicationContextHeader: false
 
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 100
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 2000

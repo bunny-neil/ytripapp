@@ -170,7 +170,7 @@ public class ApiConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/sessions/**").permitAll()
+                    .antMatchers("/sessions/**", "/health").permitAll()
                     .anyRequest().authenticated();
         }
     }
