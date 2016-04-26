@@ -1,5 +1,6 @@
 package com.ytripapp.api.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,15 +16,18 @@ public class Passport implements UserDetails {
     private Long userId;
     private boolean enabled;
     private String username;
+    @JsonIgnore
     private String password;
     private Set<SimpleGrantedAuthority> authorities;
+    Object payload;
 
-    public Passport(Long userId, boolean enabled, String username, String password, Set<SimpleGrantedAuthority> authorities) {
+    public Passport(Long userId, boolean enabled, String username, String password, Set<SimpleGrantedAuthority> authorities, Object payload) {
         this.userId = userId;
         this.enabled = enabled;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+        this.payload = payload;
     }
 
     @Override
@@ -63,5 +67,9 @@ public class Passport implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public Object getPayload() {
+        return payload;
     }
 }
