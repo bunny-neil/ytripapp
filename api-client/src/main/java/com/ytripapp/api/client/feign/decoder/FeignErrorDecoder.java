@@ -1,13 +1,19 @@
 package com.ytripapp.api.client.feign.decoder;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
 import com.ytripapp.api.client.feign.support.ApiError;
+import com.ytripapp.api.client.feign.support.ApiError.FieldError;
+import com.ytripapp.api.client.feign.support.PageRequest;
 import feign.FeignException;
 import feign.Response;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Slf4j
 public class FeignErrorDecoder implements feign.codec.ErrorDecoder {
@@ -25,7 +31,22 @@ public class FeignErrorDecoder implements feign.codec.ErrorDecoder {
                 case 400:
                 case 404:
                 case 500:
-                    ApiError error = objectMapper.readValue(response.body().asInputStream(), ApiError.class);
+                    ApiError error = new ApiError();
+                    JsonNode rootNode = objectMapper.readTree(response.body().asInputStream());
+                    JsonNode codeNode = rootNode.get("code");
+                    if (codeNode != null) {
+                        error.setCode(codeNode.asText());
+                    }
+                    JsonNode messageNode = rootNode.get("message");
+                    if (messageNode != null) {
+                        error.setMessage(messageNode.asText());
+                    }
+
+                    Iterator<JsonNode> errorsIterator = rootNode.get("errors").elements();
+                    while (errorsIterator.hasNext()) {
+                        FieldError fieldError = objectMapper.treeToValue(errorsIterator.next(), FieldError.class);
+                        error.getErrors().add(fieldError);
+                    }
                     return new HystrixBadRequestException(error.getMessage(), error);
             }
         } catch (IOException e) {

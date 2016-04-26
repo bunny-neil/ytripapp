@@ -3,6 +3,7 @@ package com.ytripapp.gateway.security;
 import com.ytripapp.api.client.UserSessionResourceClient;
 import com.ytripapp.api.client.command.UserSessionCommand;
 import com.ytripapp.api.client.domain.UserSession;
+import com.ytripapp.api.client.feign.support.ApiError;
 import com.ytripapp.api.security.Passport;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -33,7 +34,13 @@ public class ApiAuthenticationProvider extends AbstractUserDetailsAuthentication
         UserSessionCommand command = new UserSessionCommand();
         command.setEmailAddress(username);
         command.setPassword(password);
-        UserSession userSession = userSessionResourceClient.create(command);
+        UserSession userSession = null;
+        try {
+            userSession = userSessionResourceClient.create(command);
+        }
+        catch (ApiError error) {
+            int a = 0;
+        }
         return new Passport(
             userSession.getUserId(),
             userSession.isEnabled(),

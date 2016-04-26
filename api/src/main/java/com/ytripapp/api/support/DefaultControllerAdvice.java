@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class DefaultControllerAdvice {
@@ -36,12 +37,11 @@ public class DefaultControllerAdvice {
         ApiError error = new ApiError();
         error.setCode("error.validation");
         error.setMessage(messageSource.getMessage(error.getCode(), null, locale));
-        ex.getBindingResult().getFieldErrors().stream()
-            .forEach(fieldError ->
-                    error.getErrors().put(
-                        fieldError.getField(),
-                        messageSource.getMessage(fieldError.getCode(), fieldError.getArguments(), locale))
-            );
+        error.getErrors().addAll(
+            ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> new ApiError.FieldError(fieldError.getField(), messageSource.getMessage(fieldError.getCode(), fieldError.getArguments(), locale)))
+                .collect(Collectors.toList())
+        );
         return error;
     }
 }

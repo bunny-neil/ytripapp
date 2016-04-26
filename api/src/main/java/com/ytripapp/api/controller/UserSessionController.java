@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Locale;
@@ -48,16 +49,17 @@ public class UserSessionController {
         return new ResponseEntity<>(userSessionService.create(command), HttpStatus.OK);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     @ExceptionHandler({
         InvalidEmailAddressException.class,
         InvalidCredentialsException.class
     })
-    public ResponseEntity<ApiError> handleSessionCreationException(ApiException ex, Locale locale) {
+    public ApiError handleSessionCreationException(ApiException ex, Locale locale) {
         ApiError error = new ApiError();
         error.setCode(ex.getCode());
         error.setMessage(messageSource.getMessage(error.getCode(), ex.getArguments(), locale));
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return error;
     }
 
 }

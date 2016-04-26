@@ -2,8 +2,11 @@ package com.ytripapp.api.client.feign.support;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -14,6 +17,11 @@ public class ApiError extends RuntimeException {
 
     private String code;
     private String message;
-    private Map<String, String> errors = new HashMap<>();
+    private List<FieldError> errors = new ArrayList<>();
 
+    @Data
+    public static class FieldError {
+        String field;
+        String message;
+    }
 }
