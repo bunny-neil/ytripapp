@@ -36,6 +36,8 @@ public class UserSessionService {
             .enabled(user.isEnabled())
             .profile(user.getProfile())
             .userId(user.getId())
+            .username(user.getEmailAddress())
+            .password(user.getPassword())
             .authorities(user.getAuthorities().stream().map(Authority::name).collect(Collectors.toSet()))
             .build();
     }

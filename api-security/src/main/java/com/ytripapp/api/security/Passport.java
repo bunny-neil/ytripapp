@@ -1,9 +1,5 @@
-package com.ytripapp.gateway.security;
+package com.ytripapp.api.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ytripapp.api.client.domain.UserProfile;
-import com.ytripapp.api.client.domain.UserSession;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,33 +7,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-@Getter
-@JsonIgnoreProperties({"username", "password", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
-public class UserSessionDetails implements UserDetails {
+public class Passport implements UserDetails {
+
+    private static final long serialVersionUID = 3691383723707008744L;
 
     private Long userId;
     private boolean enabled;
-    UserProfile profile;
-    private Set<SimpleGrantedAuthority> authorities = new HashSet<>();
     private String username;
     private String password;
+    private Set<SimpleGrantedAuthority> authorities;
 
-    public UserSessionDetails(UserSession session, String username, String password) {
-        userId = session.getUserId();
-        enabled = session.isEnabled();
-        profile = session.getProfile();
-        authorities.addAll(
-            session.getAuthorities().stream().map(name -> new SimpleGrantedAuthority(name)).collect(Collectors.toSet())
-        );
+    public Passport(Long userId, boolean enabled, String username, String password, Set<SimpleGrantedAuthority> authorities) {
+        this.userId = userId;
+        this.enabled = enabled;
         this.username = username;
         this.password = password;
+        this.authorities = authorities;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     @Override

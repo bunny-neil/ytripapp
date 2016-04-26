@@ -1,5 +1,6 @@
 package com.ytripapp.gateway.security;
 
+import com.ytripapp.api.security.Passport;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;
@@ -24,7 +25,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
             HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
         super.clearAuthenticationAttributes(request);
-        UserSessionDetails details = (UserSessionDetails)authentication.getPrincipal();
+        Passport details = (Passport)authentication.getPrincipal();
         converter.write(details, MediaType.APPLICATION_JSON_UTF8, new ServletServerHttpResponse(response));
     }
 }

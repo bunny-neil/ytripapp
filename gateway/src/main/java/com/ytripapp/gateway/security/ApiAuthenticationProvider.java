@@ -3,10 +3,14 @@ package com.ytripapp.gateway.security;
 import com.ytripapp.api.client.UserSessionResourceClient;
 import com.ytripapp.api.client.command.UserSessionCommand;
 import com.ytripapp.api.client.domain.UserSession;
+import com.ytripapp.api.security.Passport;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.stream.Collectors;
 
 public class ApiAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
@@ -30,6 +34,13 @@ public class ApiAuthenticationProvider extends AbstractUserDetailsAuthentication
         command.setEmailAddress(username);
         command.setPassword(password);
         UserSession userSession = userSessionResourceClient.create(command);
-        return new UserSessionDetails(userSession, username, password);
+        return new Passport(
+            userSession.getUserId(),
+            userSession.isEnabled(),
+            userSession.getUsername(),
+            userSession.getPassword(),
+            userSession.getAuthorities()
+                .stream().map(name -> new SimpleGrantedAuthority(name)).collect(Collectors.toSet())
+        );
     }
 }

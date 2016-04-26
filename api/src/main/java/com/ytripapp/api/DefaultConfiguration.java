@@ -1,4 +1,4 @@
-package com.ytripapp.api.configuration;
+package com.ytripapp.api;
 
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;

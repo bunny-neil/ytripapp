@@ -12,6 +12,8 @@ public class UserSession {
 
     private Long userId;
     private boolean enabled;
-    private UserProfile profile;
+    private String username;
+    private String password;
     private Set<String> authorities;
+    private UserProfile profile;
 }

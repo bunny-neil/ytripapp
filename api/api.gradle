@@ -21,7 +21,7 @@ dependencies {
     compile lucene_queryparser
     compile lucene_analyzers_smartcn
     runtime 'mysql:mysql-connector-java'
-    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile project(':api-security')
     compile "org.springframework.session:spring-session:${spring_session_version}"
     compile "org.springframework.session:spring-session-data-redis:${spring_session_version}"
     compile lombok

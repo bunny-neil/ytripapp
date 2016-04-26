@@ -1,6 +1,5 @@
 package com.ytripapp.api;
 
-import com.ytripapp.api.configuration.DefaultConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.ComponentScan;
 
