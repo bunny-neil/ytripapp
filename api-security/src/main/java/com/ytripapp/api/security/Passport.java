@@ -19,15 +19,13 @@ public class Passport implements UserDetails {
     @JsonIgnore
     private String password;
     private Set<SimpleGrantedAuthority> authorities;
-    Object payload;
 
-    public Passport(Long userId, boolean enabled, String username, String password, Set<SimpleGrantedAuthority> authorities, Object payload) {
+    public Passport(Long userId, boolean enabled, String username, String password, Set<SimpleGrantedAuthority> authorities) {
         this.userId = userId;
         this.enabled = enabled;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
-        this.payload = payload;
     }
 
     @Override
@@ -69,7 +67,4 @@ public class Passport implements UserDetails {
         return enabled;
     }
 
-    public Object getPayload() {
-        return payload;
-    }
 }

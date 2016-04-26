@@ -40,8 +40,7 @@ public class ApiAuthenticationProvider extends AbstractUserDetailsAuthentication
             userSession.getUsername(),
             userSession.getPassword(),
             userSession.getAuthorities()
-                .stream().map(name -> new SimpleGrantedAuthority(name)).collect(Collectors.toSet()),
-            userSession.getProfile()
+                .stream().map(name -> new SimpleGrantedAuthority(name)).collect(Collectors.toSet())
         );
     }
 }
