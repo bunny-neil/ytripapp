@@ -30,10 +30,11 @@ public class ApiAuthenticationProvider extends AbstractUserDetailsAuthentication
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
         throws AuthenticationException {
-        String password = authentication.getCredentials().toString();
-        UserSessionCommand command = new UserSessionCommand();
-        command.setEmailAddress(username);
-        command.setPassword(password);
+        String password = null;
+        if (authentication.getCredentials() != null) {
+            password = authentication.getCredentials().toString();
+        }
+        UserSessionCommand command = new UserSessionCommand(ensureNotNull(username), ensureNotNull(password));
         UserSession userSession;
         try {
             userSession = userSessionResourceClient.create(command);
@@ -51,5 +52,12 @@ public class ApiAuthenticationProvider extends AbstractUserDetailsAuthentication
             userSession.getProfile().getNickname(),
             userSession.getProfile().getPortraitUri()
         );
+    }
+
+    String ensureNotNull(String s) {
+        if (s == null) {
+            return "";
+        }
+        return s;
     }
 }
