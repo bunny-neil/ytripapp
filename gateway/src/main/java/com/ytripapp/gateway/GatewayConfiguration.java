@@ -58,7 +58,7 @@ public class GatewayConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.csrf().disable()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                     .authorizeRequests()
                     .antMatchers("/health").permitAll()
