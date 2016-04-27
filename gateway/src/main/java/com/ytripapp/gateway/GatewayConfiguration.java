@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ytripapp.api.client.ClientConfiguration;
 import com.ytripapp.api.client.UserSessionResourceClient;
 import com.ytripapp.gateway.security.ApiAuthenticationProvider;
+import com.ytripapp.gateway.security.AuthenticationFailureHandler;
 import com.ytripapp.gateway.security.AuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -65,6 +66,7 @@ public class GatewayConfiguration {
                     .formLogin()
                     .loginProcessingUrl("/api/v2/sessions")
                     .successHandler(new AuthenticationSuccessHandler(converter))
+                    .failureHandler(new AuthenticationFailureHandler(converter))
                 .and()
                     .exceptionHandling().authenticationEntryPoint(new Http401AuthenticationEntryPoint(""));
         }

@@ -39,7 +39,7 @@ public class ApiAuthenticationProvider extends AbstractUserDetailsAuthentication
             userSession = userSessionResourceClient.create(command);
         }
         catch (ApiError error) {
-            throw new UsernameOrPasswordInvalidException();
+            throw new AuthenticationFailureException(error);
         }
         return new Passport(
             userSession.getUserId(),
