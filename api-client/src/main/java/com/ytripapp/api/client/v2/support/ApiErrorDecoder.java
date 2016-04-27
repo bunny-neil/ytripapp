@@ -1,10 +1,8 @@
-package com.ytripapp.api.client.feign.decoder;
+package com.ytripapp.api.client.v2.support;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
-import com.ytripapp.api.client.feign.support.ApiError;
-import com.ytripapp.api.client.feign.support.ApiError.FieldError;
 import feign.FeignException;
 import feign.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +11,11 @@ import java.io.IOException;
 import java.util.Iterator;
 
 @Slf4j
-public class FeignErrorDecoder implements feign.codec.ErrorDecoder {
+public class ApiErrorDecoder implements feign.codec.ErrorDecoder {
 
     ObjectMapper objectMapper;
 
-    public FeignErrorDecoder(ObjectMapper objectMapper) {
+    public ApiErrorDecoder(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -43,7 +41,7 @@ public class FeignErrorDecoder implements feign.codec.ErrorDecoder {
 
                     Iterator<JsonNode> errorsIterator = rootNode.get("errors").elements();
                     while (errorsIterator.hasNext()) {
-                        FieldError fieldError = objectMapper.treeToValue(errorsIterator.next(), FieldError.class);
+                        ApiError.FieldError fieldError = objectMapper.treeToValue(errorsIterator.next(), ApiError.FieldError.class);
                         error.getErrors().add(fieldError);
                     }
                     return new HystrixBadRequestException(error.getMessage(), error);

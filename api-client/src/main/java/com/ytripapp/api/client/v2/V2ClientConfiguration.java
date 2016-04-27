@@ -1,17 +1,17 @@
-package com.ytripapp.api.client;
+package com.ytripapp.api.client.v2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.strategy.HystrixPlugins;
-import com.ytripapp.api.client.feign.UserSessionResource;
 import com.ytripapp.api.client.feign.decoder.CustomObjectDecoder;
-import com.ytripapp.api.client.feign.decoder.FeignErrorDecoder;
 import com.ytripapp.api.client.feign.decoder.FeignResponseDecoder;
-import com.ytripapp.api.client.feign.decoder.PageDecoder;
 import com.ytripapp.api.client.feign.support.ApiHttpSessionStrategy;
 import com.ytripapp.api.client.feign.support.ApiRequestContextInterceptor;
 import com.ytripapp.api.client.feign.support.ApiRequestContextLifeCycleFilter;
 import com.ytripapp.api.client.feign.support.ApiRequestLocaleResolver;
 import com.ytripapp.api.client.feign.support.HystrixConcurrencyStrategy;
+import com.ytripapp.api.client.v2.resource.UserSessionResource;
+import com.ytripapp.api.client.v2.support.ApiErrorDecoder;
+import com.ytripapp.api.client.v2.support.PageDecoder;
 import feign.codec.ErrorDecoder;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectFactory;
@@ -33,9 +33,8 @@ import java.util.ArrayList;
 @EnableCircuitBreaker
 @EnableFeignClients(basePackageClasses = UserSessionResource.class)
 @Configuration
-public class ClientConfiguration {
+public class V2ClientConfiguration {
 
-    // the version must be the same as branch name
     public static final String API_VERSION = "v2";
 
     @Bean
@@ -60,7 +59,7 @@ public class ClientConfiguration {
 
         @Bean
         ErrorDecoder feignErrorDecoder() {
-            return new FeignErrorDecoder(objectMapper);
+            return new ApiErrorDecoder(objectMapper);
         }
 
         @Bean

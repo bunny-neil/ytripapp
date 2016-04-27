@@ -1,9 +1,8 @@
-package com.ytripapp.api.client.feign.decoder;
+package com.ytripapp.api.client.v2.support;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ytripapp.api.client.feign.support.Page;
-import com.ytripapp.api.client.feign.support.PageRequest;
+import com.ytripapp.api.client.feign.decoder.CustomObjectDecoder;
 import feign.Response;
 
 import java.io.IOException;

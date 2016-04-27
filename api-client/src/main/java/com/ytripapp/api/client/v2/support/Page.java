@@ -1,4 +1,4 @@
-package com.ytripapp.api.client.feign.support;
+package com.ytripapp.api.client.v2.support;
 
 import lombok.Getter;
 

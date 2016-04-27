@@ -1,4 +1,4 @@
-package com.ytripapp.api.client.command;
+package com.ytripapp.api.client.v2.command;
 
 import lombok.Getter;
 

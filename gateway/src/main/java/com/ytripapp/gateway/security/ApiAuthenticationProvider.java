@@ -1,9 +1,9 @@
 package com.ytripapp.gateway.security;
 
-import com.ytripapp.api.client.UserSessionResourceClient;
-import com.ytripapp.api.client.command.UserSessionCommand;
-import com.ytripapp.api.client.domain.UserSession;
-import com.ytripapp.api.client.feign.support.ApiError;
+import com.ytripapp.api.client.v2.UserSessionResourceClient;
+import com.ytripapp.api.client.v2.command.UserSessionCommand;
+import com.ytripapp.api.client.v2.domain.UserSession;
+import com.ytripapp.api.client.v2.support.ApiError;
 import com.ytripapp.api.security.Passport;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;

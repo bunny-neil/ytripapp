@@ -1,4 +1,4 @@
-package com.ytripapp.api.client.domain;
+package com.ytripapp.api.client.v2.domain;
 
 public interface SocialConnectionProvider {
 

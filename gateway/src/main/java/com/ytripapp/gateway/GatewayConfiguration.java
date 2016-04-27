@@ -2,8 +2,8 @@ package com.ytripapp.gateway;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ytripapp.api.client.ClientConfiguration;
-import com.ytripapp.api.client.UserSessionResourceClient;
+import com.ytripapp.api.client.v2.V2ClientConfiguration;
+import com.ytripapp.api.client.v2.UserSessionResourceClient;
 import com.ytripapp.gateway.security.ApiAuthenticationProvider;
 import com.ytripapp.gateway.security.AuthenticationFailureHandler;
 import com.ytripapp.gateway.security.AuthenticationSuccessHandler;
@@ -26,7 +26,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableDiscoveryClient
 @EnableZuulProxy
 @EnableAutoConfiguration
-@Import(ClientConfiguration.class)
+@Import(V2ClientConfiguration.class)
 @Configuration
 public class GatewayConfiguration {
 
