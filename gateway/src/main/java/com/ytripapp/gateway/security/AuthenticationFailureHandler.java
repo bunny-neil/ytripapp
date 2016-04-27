@@ -1,6 +1,6 @@
 package com.ytripapp.gateway.security;
 
-import com.ytripapp.api.client.v2.support.ApiError;
+import com.ytripapp.api.client.feign.decoder.ApiError;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;

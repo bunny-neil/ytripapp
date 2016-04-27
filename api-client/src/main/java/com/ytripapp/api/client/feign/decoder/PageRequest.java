@@ -1,4 +1,4 @@
-package com.ytripapp.api.client.v2.support;
+package com.ytripapp.api.client.feign.decoder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package com.ytripapp.api.client.v2.support;
+package com.ytripapp.api.client.feign.decoder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
