@@ -34,7 +34,7 @@ public class ApiAuthenticationProvider extends AbstractUserDetailsAuthentication
         UserSessionCommand command = new UserSessionCommand();
         command.setEmailAddress(username);
         command.setPassword(password);
-        UserSession userSession = null;
+        UserSession userSession;
         try {
             userSession = userSessionResourceClient.create(command);
         }

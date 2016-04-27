@@ -1,6 +1,9 @@
 package com.ytripapp.gateway.security;
 
+import com.ytripapp.api.client.feign.support.ApiError;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.core.AuthenticationException;
 
 import javax.servlet.ServletException;
@@ -20,7 +23,11 @@ public class AuthenticationFailureHandler implements org.springframework.securit
     public void onAuthenticationFailure(
         HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
         throws IOException, ServletException {
-
+        Throwable t = exception.getCause();
+        if (ApiError.class.isAssignableFrom(t.getClass())) {
+            ApiError error = (ApiError)t;
+            response.setStatus(error.getStatus());
+            converter.write(error, MediaType.APPLICATION_JSON_UTF8, new ServletServerHttpResponse(response));
+        }
     }
-
 }
