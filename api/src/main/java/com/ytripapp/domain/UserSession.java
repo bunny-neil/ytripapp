@@ -3,7 +3,6 @@ package com.ytripapp.domain;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
