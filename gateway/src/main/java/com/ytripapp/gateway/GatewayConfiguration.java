@@ -61,6 +61,7 @@ public class GatewayConfiguration {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                     .authorizeRequests()
+                    .antMatchers("/health").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

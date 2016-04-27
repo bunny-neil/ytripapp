@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@JsonIgnoreProperties({"suppressed", "stackTrace", "localizedMessage", "message", "cause"})
+@JsonIgnoreProperties({"suppressed", "stackTrace", "localizedMessage", "cause"})
 public class ApiError extends RuntimeException {
 
     private static final long serialVersionUID = 3516882047419286172L;
