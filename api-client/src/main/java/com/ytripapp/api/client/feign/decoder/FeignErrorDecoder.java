@@ -32,6 +32,8 @@ public class FeignErrorDecoder implements feign.codec.ErrorDecoder {
                 case 404:
                 case 500:
                     ApiError error = new ApiError();
+                    error.setStatus(response.status());
+
                     JsonNode rootNode = objectMapper.readTree(response.body().asInputStream());
                     JsonNode codeNode = rootNode.get("code");
                     if (codeNode != null) {

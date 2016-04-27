@@ -35,6 +35,7 @@ public class DefaultControllerAdvice {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ApiError handleValidationException(MethodArgumentNotValidException ex, Locale locale) {
         ApiError error = new ApiError();
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setCode("error.validation");
         error.setMessage(messageSource.getMessage(error.getCode(), null, locale));
         error.getErrors().addAll(

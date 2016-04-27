@@ -15,6 +15,7 @@ public class ApiError extends RuntimeException {
 
     private static final long serialVersionUID = 3516882047419286172L;
 
+    private int status;
     private String code;
     private String message;
     private List<FieldError> errors = new ArrayList<>();
