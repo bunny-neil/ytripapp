@@ -41,5 +41,4 @@ public class UserSessionService {
             .authorities(user.getAuthorities().stream().map(Authority::name).collect(Collectors.toSet()))
             .build();
     }
-
 }
