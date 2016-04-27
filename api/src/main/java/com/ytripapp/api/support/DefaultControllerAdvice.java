@@ -41,7 +41,10 @@ public class DefaultControllerAdvice {
         ApiError error = createBadRequestError(locale);
         error.getErrors().addAll(
             ex.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> new ApiError.FieldError(fieldError.getField(), messageSource.getMessage(fieldError.getCode(), fieldError.getArguments(), locale)))
+                .map(fieldError ->
+                    new ApiError.FieldError(
+                        fieldError.getField(),
+                        messageSource.getMessage(fieldError.getCode(), fieldError.getArguments(), locale)))
                 .collect(Collectors.toList())
         );
         return error;

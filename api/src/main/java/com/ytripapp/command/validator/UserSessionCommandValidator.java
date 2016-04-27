@@ -19,7 +19,7 @@ public class UserSessionCommandValidator implements Validator {
     public void validate(Object target, Errors errors) {
         UserSessionCommand command = (UserSessionCommand)target;
         if (! emailValidator.isValid(command.getEmailAddress())) {
-            errors.rejectValue("emailAddress", "invalid.userSession.emailAddressOrPassword");
+            errors.rejectValue("emailAddress", "invalid.userSession.emailAddress");
         }
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "empty.userSession.password");
     }
