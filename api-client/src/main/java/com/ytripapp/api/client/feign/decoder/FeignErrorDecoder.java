@@ -5,15 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
 import com.ytripapp.api.client.feign.support.ApiError;
 import com.ytripapp.api.client.feign.support.ApiError.FieldError;
-import com.ytripapp.api.client.feign.support.PageRequest;
 import feign.FeignException;
 import feign.Response;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 @Slf4j
 public class FeignErrorDecoder implements feign.codec.ErrorDecoder {

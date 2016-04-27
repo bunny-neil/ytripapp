@@ -1,6 +1,5 @@
 package com.ytripapp.api.client.feign;
 
-import com.ytripapp.api.client.ClientConfiguration;
 import com.ytripapp.api.client.command.UserSessionCommand;
 import com.ytripapp.api.client.domain.UserSession;
 import org.springframework.cloud.netflix.feign.FeignClient;

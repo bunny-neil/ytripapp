@@ -2,12 +2,9 @@ package com.ytripapp.api.client.feign.support;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @JsonIgnoreProperties({"suppressed", "stackTrace", "localizedMessage", "cause"})

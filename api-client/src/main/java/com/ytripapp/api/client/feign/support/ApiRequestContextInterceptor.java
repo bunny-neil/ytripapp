@@ -2,10 +2,6 @@ package com.ytripapp.api.client.feign.support;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import feign.Util;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Base64;
 
 public class ApiRequestContextInterceptor implements RequestInterceptor {
 
