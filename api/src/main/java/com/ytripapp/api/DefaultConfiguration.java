@@ -36,7 +36,7 @@ import javax.persistence.EntityManager;
     RedisAutoConfiguration.class,
     RedisHttpSessionConfiguration.class
 })
-public class DefaultConfiguration implements InitializingBean, DisposableBean {
+public class DefaultConfiguration {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -76,21 +76,5 @@ public class DefaultConfiguration implements InitializingBean, DisposableBean {
         objectMapper.registerModule(hibernate5Module);
         Jackson2ObjectMapperBuilder.json().configure(objectMapper);
         return new MappingJackson2HttpMessageConverter(objectMapper);
-    }
-
-    @Autowired
-    EntityManager em;
-
-    FullTextEntityManager indexManager;
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        indexManager = Search.getFullTextEntityManager(em);
-        indexManager.createIndexer().startAndWait();
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        indexManager.close();
     }
 }
