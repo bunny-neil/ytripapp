@@ -38,4 +38,4 @@ management:
 
 ---
 spring.profiles: production
-spring.profiles.include: cloud,jdbc-pool
+spring.profiles.include: cloud,jdbc-pool,security,session
