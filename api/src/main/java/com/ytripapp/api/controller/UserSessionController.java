@@ -61,5 +61,4 @@ public class UserSessionController {
         error.setMessage(messageSource.getMessage(error.getCode(), ex.getArguments(), locale));
         return error;
     }
-
 }
