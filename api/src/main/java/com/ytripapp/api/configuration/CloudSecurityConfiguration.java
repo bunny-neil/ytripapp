@@ -31,7 +31,7 @@ import org.springframework.session.web.http.HttpSessionStrategy;
     ManagementWebSecurityAutoConfiguration.class
 })
 @Configuration
-public class CloudConfiguration extends WebSecurityConfigurerAdapter {
+public class CloudSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${api.session.header-name:X-Ytrip-Session}")
     String apiSessionHeaderName;
