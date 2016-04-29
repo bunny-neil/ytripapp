@@ -1,9 +1,9 @@
 package com.ytripapp.service;
 
+import com.ytripapp.api.security.UserSession;
 import com.ytripapp.command.UserSessionCommand;
 import com.ytripapp.domain.Authority;
 import com.ytripapp.domain.User;
-import com.ytripapp.domain.UserSession;
 import com.ytripapp.exception.InvalidCredentialsException;
 import com.ytripapp.exception.InvalidEmailAddressException;
 import com.ytripapp.repository.UserRepository;
@@ -31,14 +31,19 @@ public class UserSessionService {
         if (! passwordEncoder.matches(command.getPassword(), user.getPassword())) {
             throw new InvalidCredentialsException();
         }
-        return UserSession
-            .builder()
-            .enabled(user.isEnabled())
-            .profile(user.getProfile())
-            .userId(user.getId())
-            .username(user.getEmailAddress())
-            .password(user.getPassword())
-            .authorities(user.getAuthorities().stream().map(Authority::name).collect(Collectors.toSet()))
-            .build();
+        UserSession session = new UserSession();
+        session.getAuthorities().addAll(
+            user.getAuthorities()
+                .stream()
+                .map(Authority::name)
+                .collect(Collectors.toSet())
+        );
+        session.setEmailAddress(user.getEmailAddress());
+        session.setEnabled(user.isEnabled());
+        session.setNickname(user.getProfile().getNickname());
+        session.setPassword(user.getPassword());
+        session.setPortraitUri(user.getProfile().getPortraitUri());
+        session.setUserId(user.getId());
+        return session;
     }
 }

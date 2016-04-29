@@ -1,17 +1,14 @@
 package com.ytripapp.gateway.security;
 
+import com.ytripapp.api.client.feign.decoder.ApiError;
 import com.ytripapp.api.client.v2.UserSessionResourceClient;
 import com.ytripapp.api.client.v2.command.UserSessionCommand;
-import com.ytripapp.api.client.v2.domain.UserSession;
-import com.ytripapp.api.client.feign.decoder.ApiError;
 import com.ytripapp.api.security.Passport;
+import com.ytripapp.api.security.UserSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.stream.Collectors;
 
 public class ApiAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
@@ -35,23 +32,14 @@ public class ApiAuthenticationProvider extends AbstractUserDetailsAuthentication
             password = authentication.getCredentials().toString();
         }
         UserSessionCommand command = new UserSessionCommand(ensureNotNull(username), ensureNotNull(password));
-        UserSession userSession;
+        UserSession session;
         try {
-            userSession = userSessionResourceClient.create(command);
+            session = userSessionResourceClient.create(command);
         }
         catch (ApiError error) {
             throw new AuthenticationFailureException(error);
         }
-        return new Passport(
-            userSession.getUserId(),
-            userSession.isEnabled(),
-            userSession.getUsername(),
-            userSession.getPassword(),
-            userSession.getAuthorities()
-                .stream().map(name -> new SimpleGrantedAuthority(name)).collect(Collectors.toSet()),
-            userSession.getProfile().getNickname(),
-            userSession.getProfile().getPortraitUri()
-        );
+        return new Passport(session);
     }
 
     String ensureNotNull(String s) {

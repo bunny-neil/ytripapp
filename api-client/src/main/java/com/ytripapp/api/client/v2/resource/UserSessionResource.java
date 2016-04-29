@@ -1,7 +1,7 @@
 package com.ytripapp.api.client.v2.resource;
 
 import com.ytripapp.api.client.v2.command.UserSessionCommand;
-import com.ytripapp.api.client.v2.domain.UserSession;
+import com.ytripapp.api.security.UserSession;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

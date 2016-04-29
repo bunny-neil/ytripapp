@@ -1,4 +1,4 @@
-rootProject.name = 'ytripapp3'
+rootProject.name = 'ytripapp'
 include 'migration'
 include 'api-common'
 include 'api'

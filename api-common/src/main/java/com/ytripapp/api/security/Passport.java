@@ -1,36 +1,25 @@
 package com.ytripapp.api.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Collectors;
 
+@JsonIgnoreProperties({"password", "username", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
 public class Passport implements UserDetails {
 
-    private static final long serialVersionUID = 3691383723707008744L;
+    UserSession session;
+    Collection<? extends GrantedAuthority> authorities;
 
-    private Long userId;
-    private boolean enabled;
-    private String username;
-    @JsonIgnore
-    private String password;
-    private Set<SimpleGrantedAuthority> authorities;
-    private String nickname;
-    private String portraitUri;
-
-    public Passport(Long userId, boolean enabled, String username, String password, Set<SimpleGrantedAuthority> authorities,
-                    String nickname, String portraitUri) {
-        this.userId = userId;
-        this.enabled = enabled;
-        this.username = username;
-        this.password = password;
-        this.authorities = authorities;
-        this.nickname = nickname;
-        this.portraitUri = portraitUri;
+    public Passport(UserSession session) {
+        this.session = session;
+        authorities = session.getAuthorities()
+            .stream()
+            .map(name -> new SimpleGrantedAuthority(name))
+            .collect(Collectors.toSet());
     }
 
     @Override
@@ -38,18 +27,14 @@ public class Passport implements UserDetails {
         return authorities;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
     @Override
     public String getPassword() {
-        return password;
+        return session.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return session.getEmailAddress();
     }
 
     @Override
@@ -69,14 +54,14 @@ public class Passport implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return session.isEnabled();
     }
 
     public String getNickname() {
-        return nickname;
+        return session.getNickname();
     }
 
     public String getPortraitUri() {
-        return portraitUri;
+        return session.getPortraitUri();
     }
 }

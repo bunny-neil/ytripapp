@@ -1,9 +1,9 @@
 package com.ytripapp.api.controller;
 
+import com.ytripapp.api.security.UserSession;
 import com.ytripapp.api.support.ApiError;
 import com.ytripapp.command.UserSessionCommand;
 import com.ytripapp.command.validator.UserSessionCommandValidator;
-import com.ytripapp.domain.UserSession;
 import com.ytripapp.exception.ApiException;
 import com.ytripapp.exception.InvalidCredentialsException;
 import com.ytripapp.exception.InvalidEmailAddressException;
