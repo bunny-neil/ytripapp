@@ -1,6 +1,6 @@
 rootProject.name = 'ytripapp3'
 include 'migration'
-include 'api-security'
+include 'api-common'
 include 'api'
 include 'api-client'
 include 'gateway'

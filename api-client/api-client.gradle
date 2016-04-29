@@ -8,5 +8,5 @@ dependencies {
     compile lombok
     compile "org.springframework.session:spring-session:${spring_session_version}"
     compile "org.springframework.session:spring-session-data-redis:${spring_session_version}"
-    compile project(':api-security')
+    compile project(':api-common')
 }
